@@ -3,6 +3,12 @@ import docx2pdf
 import sys
 import os
 
+def path_nn(fn,newname,typ):
+    path_split=fn.split("\\")
+    only_old=path_split[-1]
+    nn=fn.replace(only_old,f"{newname}.{typ}")
+    return nn
+
 def main():
     parser = argparse.ArgumentParser(
         description='A utillity that converts every type of file, almost every type of file')
@@ -22,9 +28,8 @@ def main():
             case "pdf":
                 if fn.endswith(".docx"):
                     if args.newname:
-                        nn = args.newname
-                        docx2pdf.convert(fn, fn.replace(
-                            fn, nn+".pdf"))  # just provide new name and the file will be converted to pdf with that same name as it was before conversion"""
+                        nn = path_nn(fn,args.newname,args.type)
+                        docx2pdf.convert(fn,nn) 
                     else:
                         docx2pdf.convert(fn, fn.replace("docx", "pdf"))
     except Exception as e:

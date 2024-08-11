@@ -1,10 +1,7 @@
 import argparse
-import mdpdf.converter
-from pdf2docx import Converter
 import docx2pdf
-import mdpdf
-import sys
-import os
+from pdf2docx import Converter
+import md2pdf
 
 
 def path_nn(fn, newname, typ):
@@ -34,16 +31,22 @@ def main():
         nn = fn.replace(fn.split(".")[-1], args.type)
 
     try:
+        wkhtmltopdf_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
         match args.type:  # pdf to docx conversion
             case "pdf":
                 if fn.endswith(".docx"):
                     docx2pdf.convert(fn, nn)
+                elif fn.endswith(".md"):
+                    md2pdf.convert_md_to_pdf(fn, nn, wkhtmltopdf_path)
 
             case "docx":
                 if fn.endswith(".pdf"):
                     cv = Converter(fn)
                     cv.convert(nn, start=0, end=None)
                     cv.close()
+                elif fn.endswith(".md"):
+                   print("You can't directly convert md to docx file")
+
 
     except NotADirectoryError:
         print("File not found error")
@@ -59,14 +62,6 @@ def main():
         print("Keyboard Interrupt Error")
     except Exception as e:
         print(e)
-
-    print(args.file_name)
-    print(args.type)
-    if args.newname:
-        print(args.newname)
-    else:
-        print("No new name provided")
-
-
+        
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 import argparse
 import docx2pdf
 from pdf2docx import Converter
-import md2pdf
+from OmniConverters import md2pdf, md2docx, pdf2md, docx2md
 
 
 def path_nn(fn, newname, typ):
@@ -45,8 +45,13 @@ def main():
                     cv.convert(nn, start=0, end=None)
                     cv.close()
                 elif fn.endswith(".md"):
-                   print("You can't directly convert md to docx file")
+                    md2docx.md_to_docx(fn, nn)
 
+            case "md":
+                if fn.endswith(".pdf"):
+                    pdf2md.convert_pdf_to_md(fn, nn)
+                elif fn.endswith(".docx"):
+                    docx2md.docx_to_md(fn, nn)
 
     except NotADirectoryError:
         print("File not found error")
@@ -62,6 +67,7 @@ def main():
         print("Keyboard Interrupt Error")
     except Exception as e:
         print(e)
-        
+
+
 if __name__ == "__main__":
     main()
